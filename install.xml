@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE modification SYSTEM "http://www.simplemachines.org/xml/modification">
+<!--Generated with Mod Manager (c) 2013 Yoshi2889-->
+<modification xmlns:smf="http://www.simplemachines.org/" xmlns="http://www.simplemachines.org/xml/modification">
+    <id>margarett:CustomActions</id>
+    <version>0.1</version>
+    <file name="$boarddir/index.php">
+        <operation>
+            <search position="before"><![CDATA[	call_integration_hook('integrate_actions', array(&$actionArray));
+
+]]></search>
+            <add><![CDATA[	// Add custom actions to the array.
+	$actionArray['ca_edit'] = array('CustomAction.php' , 'CustomActionEdit');
+	$actionArray['ca_list'] = array('CustomAction.php' , 'CustomActionList');
+	if (!empty($modSettings['ca_list'])) {
+		$ca_temp = explode(',', $modSettings['ca_list']);
+		foreach ($ca_temp as $key => $value)
+			$actionArray[$value] = array('CustomAction.php', 'ViewCustomAction');
+	}
+
+]]></add>
+        </operation>
+    </file>
+    <file name="$sourcedir/ManagePermissions.php">
+        <operation>
+            <search position="before"><![CDATA[			'profile_remove' => array(true, 'profile_account'),
+]]></search>
+            <add><![CDATA[			'create_custom_action' => array(false, 'custom_actions'),
+			'edit_custom_action' => array(true, 'custom_actions', 'custom_actions'),
+			'remove_custom_action' => array(true, 'custom_actions', 'custom_actions'), 
+]]></add>
+        </operation>
+    </file>
+    <file name="$sourcedir/Subs.php">
+        <operation>
+            <search position="replace"><![CDATA[	global $context, $modSettings, $user_info, $txt, $scripturl;]]></search>
+            <add><![CDATA[	global $context, $modSettings, $user_info, $txt, $scripturl, $sourcedir;]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[		call_integration_hook('integrate_menu_buttons', array(&$buttons));
+
+]]></search>
+            <add><![CDATA[		// ************ CUSTOM ACTIONS *********** //
+		// Any custom actions in modSettings?
+		$ca_full = (!empty($modSettings['ca_cache']) ? unserialize($modSettings['ca_cache']) : array());
+		$ca_action_list = array();
+		//Show a main menu button with all actions listed inside
+		$has_actions = false;
+		$own_actions = false;
+		if (!empty($ca_full)) {
+			//We need this
+			require_once($sourcedir . '/Subs-CustomAction.php');
+			//Run through all actions
+			foreach ($ca_full as $button) {
+				//update the total actions array to, later in the file, highlight the "button" when on a custom action
+				$ca_action_list[] = $button[0];
+				//If we are allowed to see them, then we should see them
+				if (!empty($button[2]) ? ca_allowedTo($button[2]) : true)
+					$has_actions = true;
+				//Is any of the actions ours?
+				if (!empty($context['user']['id']) && ($context['user']['id'] == $button[3]))
+					$own_actions = true;
+				//If we evalueate both conditions we don't need to run this anymore!
+				if ($has_actions && $own_actions)
+					break;
+			}
+		}
+		$ca_sub_buttons = array(); //array for sub-buttons
+		//Do we have any actions of our own? Then we can just list them
+		//We also list them if we are allowed to change any or edit any
+		if ($own_actions || (!empty($ca_full) && (allowedTo('edit_custom_action_any') || allowedTo('remove_custom_action_any')))) {
+			$ca_sub_buttons[] = array(
+				'title' => $txt['ca_list_actions'],
+				'href' => $scripturl . '?action=ca_list',
+				'show' => true, //No need to check here
+			);
+		}
+		//Are we allowed to create actions? Then we can also link that
+		if (allowedTo('create_custom_action')) {
+			$ca_sub_buttons[] = array(
+				'title' => $txt['ca_make_new'],
+				'href' => $scripturl . '?action=ca_edit',
+				'show' => true, //No need to check here
+			);
+		}
+		if ($has_actions) {
+			foreach ($ca_full as $button) {
+				if (!empty($button[4]))
+					$ca_sub_buttons[] = array(
+						'title' => $button[1],
+						'href' => $scripturl . '?action=' . $button[0],
+						'show' => $button[2] ? allowedTo($button[2]) : true,
+					);
+			}	
+		}		
+		//Is there anything to create a button?
+		if (!empty($ca_sub_buttons)) {
+			//Custom Actions menu button
+			$buttons['ca_actions'] = array(
+				'title' => $txt['ca_shorttitle'],
+				'href' => $ca_sub_buttons[0]['href'], //We need a link, so be it the first action in the menu...
+				'show' => true,
+				'sub_buttons' => $ca_sub_buttons,
+				'is_last' => !$context['right_to_left'],
+			);		
+		}
+]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[		$current_action = 'moderate';
+]]></search>
+            <add><![CDATA[	elseif (($context['current_action'] == 'ca_edit') || ($context['current_action'] == 'ca_list') || in_array($context['current_action'],$ca_action_list))
+		$current_action = 'ca_actions';
+
+]]></add>
+        </operation>		
+    </file>
+</modification>
