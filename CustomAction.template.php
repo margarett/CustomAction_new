@@ -165,9 +165,9 @@ function template_edit_custom_action()
 						</dt>
 						<dd>
 							<select name="type" id="type" onchange="updateInputBoxesType();">
-								<option value="0" ', $context['action']['type'] == 0 ? 'selected="selected"' : '', '>', $txt['custom_action_type_0'], '</option>
-								<option value="1" ', $context['action']['type'] == 1 ? 'selected="selected"' : '', '>', $txt['custom_action_type_1'], '</option>
-								<option value="2" ', $context['action']['type'] == 2 ? 'selected="selected"' : '', '>', $txt['custom_action_type_2'], '</option>
+								<option value="0" ', $context['action']['type'] == 0 ? 'selected="selected"' : '', '>', $txt['ca_type_0'], '</option>
+								<option value="1" ', $context['action']['type'] == 1 ? 'selected="selected"' : '', '>', $txt['ca_type_1'], '</option>
+								<option value="2" ', $context['action']['type'] == 2 ? 'selected="selected"' : '', '>', $txt['ca_type_2'], '</option>
 							</select>
 						</dd>';
 			

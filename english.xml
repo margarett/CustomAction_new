@@ -75,6 +75,12 @@ $txt['ca_list_actions'] = 'Actions List';
 $txt['ca_edit_title'] = 'Edit Custom Action';
 $txt['ca_new_title'] = 'New Custom Action';
 
+//Action types
+$txt['ca_type_0'] = 'BBC';
+$txt['ca_type_1'] = 'HTML';
+$txt['ca_type_2'] = 'PHP';
+
+
 ]]></add>
 		</operation>
 	</file>
