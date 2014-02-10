@@ -231,7 +231,7 @@ function CustomActionList()
 			),
 			'enabled' => array(
 				'header' => array(
-					'value' => $txt['custom_action_enabled'],
+					'value' => $txt['ca_list_enabled'],
 				),
 				'data' => array(
 					'function' => create_function('$rowData', '

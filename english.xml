@@ -24,7 +24,6 @@ $txt['ca_error_duplicate_url'] = 'Action URL already in use. Please choose anoth
 $txt['ca_error_reserved_url'] = 'Action URL is reserved for non-use. Please choose another URL';
 $txt['ca_error_empty_body'] = 'The content for this Custom Action was left blank';
 $txt['ca_error_empty_groups'] = 'You didn\'t select any membergroups allowed to view this Action';
-
 //Edit page strings
 $txt['ca_name'] = 'Action name';
 $txt['ca_url'] = 'Action URL';
@@ -40,7 +39,6 @@ $txt['ca_html_header_desc'] = 'HTML - This code will be displayed in the header 
 $txt['ca_html_body_desc'] = 'HTML - This code will be displayed in the body section.';
 $txt['ca_php_header_desc'] = 'PHP - This code will be evaluated before any templates are displayed. If you don\'t understand this you should just put all your code in the template code box. No output should be displayed here.';
 $txt['ca_php_body_desc'] = 'PHP - You should display all output here.';
-
 //Membergroups allowed to see actions
 $txt['ca_membergroup_everyone'] = 'Everyone';
 $txt['ca_select_membergroups'] = 'Visible to';
@@ -51,7 +49,6 @@ $txt['ca_type'] = 'Action type';
 $txt['ca_type_0'] = 'BBC';
 $txt['ca_type_1'] = 'HTML';
 $txt['ca_type_2'] = 'PHP';
-
 //Permissions related strings
 $txt['permissiongroup_custom_actions'] = 'Custom Actions MOD';
 $txt['permissionhelp_create_custom_action'] = 'Custom Actions MOD <br />Membergroups with this permission will be able to create Custom Actions';
@@ -64,22 +61,21 @@ $txt['permissionhelp_remove_custom_action'] = 'Custom Actions MOD <br />Membergr
 $txt['permissionname_remove_custom_action'] = 'Can remove Custom Actions';
 $txt['permissionname_remove_custom_action_own'] = 'Own Actions';
 $txt['permissionname_remove_custom_action_any'] = 'Any Actions';
-
 //Menu buttons strings
 $txt['ca_shorttitle'] = 'Custom Actions';
 $txt['ca_make_new'] = 'New Action';
 $txt['ca_make_new_sub'] = 'New Sub-Action';
 $txt['ca_list_actions'] = 'Actions List';
-
 //Page titles
 $txt['ca_edit_title'] = 'Edit Custom Action';
 $txt['ca_new_title'] = 'New Custom Action';
-
-//Action types
-$txt['ca_type_0'] = 'BBC';
-$txt['ca_type_1'] = 'HTML';
-$txt['ca_type_2'] = 'PHP';
-
+//Actions list related strings
+$txt['ca_list_enabled'] = 'Enabled';
+$txt['ca_list_subs'] = 'Sub-Actions';
+$txt['ca_list_title'] = 'List of available Actions';
+$txt['ca_list_title_subs'] = 'Sub-Actions For "%1$s"';
+$txt['ca_list_none'] = 'You have not created any Custom Actions yet!';
+$txt['ca_list_none_sub'] = 'You have not created any Sub-Actions for the "%1$s" Action yet!';
 
 ]]></add>
 		</operation>
