@@ -121,7 +121,7 @@ function CustomActionList()
 {
 	global $context, $txt, $sourcedir, $scripturl, $db_prefix, $smcFunc;
 
-	$context['page_title'] = $txt['custom_action_title'];
+	$context['page_title'] = $txt['ca_list_title'];
 	loadTemplate('CustomAction');	
 	$context['sub_template'] = 'show_custom_action';
 	
@@ -158,10 +158,10 @@ function CustomActionList()
 	
 	$listOptions = array(
 		'id' => 'custom_actions',
-		'title' => $parent ? sprintf($txt['custom_action_title_sub'], $parent_name) : $txt['custom_action_title'],
+		'title' => $parent ? sprintf($txt['ca_list_title_subs'], $parent_name) : $txt['ca_list_title'],
 		'base_href' => $scripturl . '?action=ca_edit' . ($parent ? ';action=' . $parent : ''),
 		'default_sort_col' => 'action_name',
-		'no_items_label' => $parent ? sprintf($txt['custom_action_none_sub'], $parent_name) :$txt['custom_action_none'],
+		'no_items_label' => $parent ? sprintf($txt['ca_list_none_sub'], $parent_name) :$txt['ca_list_none'],
 		'items_per_page' => 25,
 		'get_items' => array(
 			'function' => 'list_getCustomActions',
@@ -178,7 +178,7 @@ function CustomActionList()
 		'columns' => array(
 			'action_name' => array(
 				'header' => array(
-					'value' => $txt['custom_action_name'],
+					'value' => $txt['ca_name'],
 					'style' => 'text-align: left;',
 				),
 				'data' => array(
@@ -196,7 +196,7 @@ function CustomActionList()
 			),
 			'action_type' => array(
 				'header' => array(
-					'value' => $txt['custom_action_type'],
+					'value' => $txt['ca_type'],
 					'style' => 'text-align: left;',
 				),
 				'data' => array(
@@ -213,7 +213,7 @@ function CustomActionList()
 			),
 			'sub_actions' => array(
 				'header' => array(
-					'value' => $txt['custom_action_sub_actions'],
+					'value' => $txt['ca_list_subs'],
 					'class' => 'centercol',
 				),
 				'data' => array(
@@ -265,7 +265,7 @@ function CustomActionList()
 		'additional_rows' => array(
 			array(
 				'position' => 'below_table_data',
-				'value' => '<a href="' . $scripturl . '?action=ca_edit' . ($parent ? ';id_parent=' . $parent : '') . '">' . $txt['custom_action_make_new' . ($parent ? '_sub' : '')] . '</a>',
+				'value' => '<a href="' . $scripturl . '?action=ca_edit' . ($parent ? ';id_parent=' . $parent : '') . '">' . $txt['ca_make_new' . ($parent ? '_sub' : '')] . '</a>',
 				//'value' => '<a class="button_link" href="' . $scripturl . '?action=admin;area=membergroups;sa=add;postgroup">' . $txt['membergroups_add_group'] . '</a>',				
 //				'class' => 'titlebg',
 			),
@@ -386,7 +386,7 @@ function CustomActionEdit($actionerrors = array())
 	//Do we have a parent action requested?
 	$parent = (!empty($_REQUEST['ca_parent']) ? (int)($_REQUEST['ca_parent']) : '');
 	//Action?
-	$action = (!empty($_REQUEST['ca_action']) ? (int)($_REQUEST['ca_action']) : '');
+	$action = (!empty($_REQUEST['id_action']) ? (int)($_REQUEST['id_action']) : '');
 	
 	// Saving?
 	if (isset($_POST['save']))
