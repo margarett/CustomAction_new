@@ -196,18 +196,18 @@ function template_edit_custom_action()
 					<div id="html_fields"' . ($context['action']['type'] != 1 ? 'style="display:none"' : '') . '>
 						<! -- HEADER AND BODY FOR HTML -->
 						<span class="smalltext">', $txt['ca_html_header_desc'], '</span>
-						<textarea name="header" rows="10" style="width:100%">' . (!empty($context['action']['header']) ? $context['action']['header'] : '') . '</textarea>
+						<textarea name="html_header" rows="10" style="width:100%">' . (!empty($context['action']['header']) ? $context['action']['header'] : '') . '</textarea>
 						<br />
 						<span class="smalltext">', $txt['ca_html_body_desc'], '</span>
-						<textarea name="body" rows="10" style="width:100%">' . (!empty($context['action']['body']) ? $context['action']['body'] : '') . '</textarea>						
+						<textarea name="html_body" rows="10" style="width:100%">' . (!empty($context['action']['body']) ? $context['action']['body'] : '') . '</textarea>						
 					</div>
 					<div id="php_fields"' . ($context['action']['type'] != 2 ? 'style="display:none"' : '') . '>
 						<! -- HEADER AND BODY FOR PHP -->
 						<span class="smalltext">', $txt['ca_php_header_desc'], '</span>
-						<textarea name="header" rows="10" style="width:100%">' . (!empty($context['action']['header']) ? $context['action']['header'] : '') . '</textarea>
+						<textarea name="php_header" rows="10" style="width:100%">' . (!empty($context['action']['header']) ? $context['action']['header'] : '') . '</textarea>
 						<br />
 						<span class="smalltext">', $txt['ca_php_body_desc'], '</span>
-						<textarea name="body" rows="10" style="width:100%">' . (!empty($context['action']['body']) ? $context['action']['body'] : '') . '</textarea>						
+						<textarea name="php_body" rows="10" style="width:100%">' . (!empty($context['action']['body']) ? $context['action']['body'] : '') . '</textarea>						
 					</div>';
 
 	// Finally, the submit buttons.

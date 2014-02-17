@@ -220,7 +220,7 @@ function CustomActionList()
 					'function' => create_function('$rowData', '
 						global $scripturl;
 
-						return \'<a href="\' . $scripturl . \'?action=ca_list;id_action=\' . $rowData[\'id_action\'] . \'">\' . $rowData[\'sub_actions\'] . \'</a>\';'),
+						return \'<a href="\' . $scripturl . \'?action=ca_list;ca_action=\' . $rowData[\'id_action\'] . \'">\' . $rowData[\'sub_actions\'] . \'</a>\';'),
 					'style' => 'width: 12%; text-align: center;',
 					'class' => 'centercol',
 				),
@@ -252,7 +252,7 @@ function CustomActionList()
 				),
 				'data' => array(
 					'sprintf' => array(
-						'format' => '<a href="' . $scripturl . '?action=ca_edit;id_action=%1$s">' . $txt['modify'] . '</a>',
+						'format' => '<a href="' . $scripturl . '?action=ca_edit;ca_action=%1$s">' . $txt['modify'] . '</a>',
 						'params' => array(
 							'id_action' => false,
 						),
@@ -386,12 +386,16 @@ function CustomActionEdit($actionerrors = array())
 	//Do we have a parent action requested?
 	$parent = (!empty($_REQUEST['ca_parent']) ? (int)($_REQUEST['ca_parent']) : '');
 	//Action?
-	$action = (!empty($_REQUEST['id_action']) ? (int)($_REQUEST['id_action']) : '');
+	$action = (!empty($_REQUEST['ca_action']) ? (int)($_REQUEST['ca_action']) : '');
 	
 	// Saving?
 	if (isset($_POST['save']))
 	{
 		checkSession();	
+		// echo '<pre>';
+		// print_r($_POST);
+		// echo '</pre>';
+		// exit;
 		//Get me a list of all actions! There is quite a lot to do with this query...
 		$request = $smcFunc['db_query']('', '
 			SELECT id_action, id_parent, url, permissions_mode, id_author
@@ -401,22 +405,23 @@ function CustomActionEdit($actionerrors = array())
 		while ($row = $smcFunc['db_fetch_assoc']($request))
 			$actions[] = $row;		
 		$smcFunc['db_free_result']($request);
-				
-		//Already some useful attributions
-		$enabled = !empty($_POST['enabled']) ? 1 : 0; // Is the action enabled?
-		$menu = !empty($_POST['menubutton']) && !$parent ? 1 : 0; // A menu button?
-		// Clean the body and headers.
-		$header = !empty($_POST['header']) ? $_POST['header'] : '';
-		$name = !empty($_POST['name']) ? $_POST['name'] : '';
-		$url = !empty($_POST['url']) ? $_POST['url'] : '';
-		$author = $context['user']['id'];
-		
+
 		//Action type. Some checking that *should* not be needed but, nevertheless...
 		$actiontype = !empty($_POST['type']) ? (int)$_POST['type'] : 0;
 		if (in_array($actiontype, array(0, 1, 2)))
 			$type = $actiontype;
 		else
 			$type = 0; //Defaults BBC
+		
+		//Already some useful attributions
+		$enabled = !empty($_POST['enabled']) ? 1 : 0; // Is the action enabled?
+		$menu = !empty($_POST['menubutton']) && !$parent ? 1 : 0; // A menu button?
+		// Clean the body and headers.
+		//$header = !empty($_POST['header']) ? $_POST['header'] : '';
+		$name = !empty($_POST['name']) ? $_POST['name'] : '';
+		$url = !empty($_POST['url']) ? $_POST['url'] : '';
+		$author = $context['user']['id'];
+		
 		//BBC needs to be parsed
 		if ($type == 0)
 		{
@@ -426,8 +431,16 @@ function CustomActionEdit($actionerrors = array())
 			// No headers for us!
 			$header = '';
 		}
-		else
-			$body = $_POST['body'];
+		elseif ($type == 1) //HTML?
+		{
+			$body = !empty($_POST['html_body']) ? $_POST['html_body'] : '';
+			$header = !empty($_POST['html_header']) ? $_POST['html_header'] : '';
+		}
+		else //PHP
+		{
+			$body = !empty($_POST['php_body']) ? $_POST['php_body'] : '';
+			$header = !empty($_POST['php_header']) ? $_POST['php_header'] : '';		
+		}
 
 		//Find the "perm_group" items posted
 		$action_groups = array();
