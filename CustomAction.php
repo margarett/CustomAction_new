@@ -836,7 +836,7 @@ function recacheCustomActions()
 	updateSettings(array(
 		'ca_cache' => serialize($cache),
 		'ca_list' => implode(',', $cache_list),
-	), true);
+	));
 
 	// Try to at least clear the cache for them.
 	//cache_put_data('menu_buttons-' . implode('_', $user_info['groups']) . '-' . $user_info['language'], null);
