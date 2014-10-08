@@ -1,14 +1,9 @@
 <?php
-/**
- * Simple Machines Forum (SMF)
- *
- * @package SMF
- * @author Simple Machines
- * @copyright 2013 Simple Machines and individual contributors
- * @license http://www.simplemachines.org/about/smf/license.php BSD
- *
- * @version 2.1 Alpha 1
- */
+/*
+ * @package Custom Actions
+ * @version 4.0
+ * @license http://creativecommons.org/licenses/by/3.0
+ */ 
 
 // The main template for the post page.
 function template_edit_custom_action()

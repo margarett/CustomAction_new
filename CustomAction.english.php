@@ -1,15 +1,24 @@
-<?xml version="1.0"?>
-<!DOCTYPE modification SYSTEM "http://www.simplemachines.org/xml/modification">
-<modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
-	<id>winrules:CustomActions</id>
-	<version>3.2</version>
+<?php
+/*
+ * @package Custom Actions
+ * @version 4.0
+ * @license http://creativecommons.org/licenses/by/3.0
+ */ 
 
-	<file name="$languagedir/Modifications.english.php">
-		<operation>
-			<search position="end" />
-			<add><![CDATA[
+//Permissions related strings
+$txt['permissiongroup_simple_ca_per_simple'] = 'Custom Actions MOD';
+$txt['permissiongroup_simple_ca_per_classic'] = 'Custom Actions MOD';
+$txt['permissionhelp_ca_createAction'] = 'Custom Actions MOD <br />Membergroups with this permission will be able to create Custom Actions';
+$txt['permissionname_ca_createAction'] = 'Can create Custom Actions';
+$txt['permissionhelp_ca_editAction'] = 'Custom Actions MOD <br />Membergroups with this permission will be able to EDIT own or any Custom Actions';
+$txt['permissionname_ca_editAction'] = 'Can edit Custom Actions';
+$txt['permissionname_ca_editAction_own'] = 'Own Actions';
+$txt['permissionname_ca_editAction_any'] = 'Any Actions';
+$txt['permissionhelp_ca_removeAction'] = 'Custom Actions MOD <br />Membergroups with this permission will be able to REMOVE own or any Custom Actions';
+$txt['permissionname_ca_removeAction'] = 'Can remove Custom Actions';
+$txt['permissionname_ca_removeAction_own'] = 'Own Actions';
+$txt['permissionname_ca_removeAction_any'] = 'Any Actions';
 
-//Custom Actions-related strings
 //Error messages
 $txt['ca_guest_not_allowed'] = 'Custom Actions Error - Guest access not allowed';
 $txt['ca_not_found'] = 'The requested action was not found';
@@ -49,18 +58,6 @@ $txt['ca_type'] = 'Action type';
 $txt['ca_type_0'] = 'BBC';
 $txt['ca_type_1'] = 'HTML';
 $txt['ca_type_2'] = 'PHP';
-//Permissions related strings
-$txt['permissiongroup_custom_actions'] = 'Custom Actions MOD';
-$txt['permissionhelp_create_custom_action'] = 'Custom Actions MOD <br />Membergroups with this permission will be able to create Custom Actions';
-$txt['permissionname_create_custom_action'] = 'Can create Custom Actions';
-$txt['permissionhelp_edit_custom_action'] = 'Custom Actions MOD <br />Membergroups with this permission will be able to EDIT own or any Custom Actions';
-$txt['permissionname_edit_custom_action'] = 'Can edit Custom Actions';
-$txt['permissionname_edit_custom_action_own'] = 'Own Actions';
-$txt['permissionname_edit_custom_action_any'] = 'Any Actions';
-$txt['permissionhelp_remove_custom_action'] = 'Custom Actions MOD <br />Membergroups with this permission will be able to REMOVE own or any Custom Actions';
-$txt['permissionname_remove_custom_action'] = 'Can remove Custom Actions';
-$txt['permissionname_remove_custom_action_own'] = 'Own Actions';
-$txt['permissionname_remove_custom_action_any'] = 'Any Actions';
 //Menu buttons strings
 $txt['ca_shorttitle'] = 'Custom Actions';
 $txt['ca_make_new'] = 'New Action';
@@ -77,7 +74,5 @@ $txt['ca_list_title_subs'] = 'Sub-Actions For "%1$s"';
 $txt['ca_list_none'] = 'You have not created any Custom Actions yet!';
 $txt['ca_list_none_sub'] = 'You have not created any Sub-Actions for the "%1$s" Action yet!';
 
-]]></add>
-		</operation>
-	</file>
-</modification>
+
+?>

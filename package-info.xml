@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE package-info SYSTEM "http://www.simplemachines.org/xml/package-info">
 <package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
-	<id>winrules:CustomActions</id>
+	<id>margarett:CustomActions</id>
 	<name>Custom Actions Mod</name>
-	<version>3.2</version>
+	<version>4.0</version>
 	<type>modification</type>
 	<install for="2.1.*-2.1.99">
-		<readme type="file" parsebbc="true">license.txt</readme>
-		<modification format="xml" type="file">install.xml</modification>
-		<modification format="xml" type="file">english.xml</modification>
+		<readme type="file" parsebbc="true">README.md</readme>
 		<database>installDatabase.php</database>
+		<code>installCode.php</code>
 		<require-file name="CustomAction.php" destination="$sourcedir" />
 		<require-file name="Subs-CustomAction.php" destination="$sourcedir" />
 		<require-file name="CustomAction.template.php" destination="$themedir" />
+		<require-file name="CustomAction.english.php" destination="$languagedir" />
+		<require-file name="CustomAction.css" destination="$themedir/css" />
+		<require-file name="ca_menuicon.png" destination="$themedir/images" />
 	</install>
 	<uninstall for="2.1.*-2.1.99">
-		<modification format="xml" type="file" reverse="true">install.xml</modification>
-		<modification format="xml" type="file" reverse="true">english.xml</modification>
 		<database>uninstallDatabase.php</database>
+		<code>uninstallCode.php</code>
 		<remove-file name="$sourcedir/CustomAction.php" />
 		<remove-file name="$sourcedir/Subs-CustomAction.php" />
 		<remove-file name="$themedir/CustomAction.template.php" />
-		</uninstall>
+		<remove-file name="$languagedir/CustomAction.english.php" />
+		<remove-file name="$themedir/css/CustomAction.css" />
+		<remove-file name="$themedir/images/ca_menuicon.png" />
+	</uninstall>
 </package-info>

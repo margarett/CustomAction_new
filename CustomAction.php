@@ -1,9 +1,9 @@
 <?php
-/**********************************************************************************
-* CustomAction.php                                                                *
-***********************************************************************************
-* Software Version:           3.0                                                 *
-**********************************************************************************/
+/*
+ * @package Custom Actions
+ * @version 4.0
+ * @license http://creativecommons.org/licenses/by/3.0
+ */ 
 
 if (!defined('SMF'))
 	die('Hacking attempt...');
@@ -120,7 +120,7 @@ function fixPHP(&$code)
 function CustomActionList()
 {
 	global $context, $txt, $sourcedir, $scripturl, $db_prefix, $smcFunc;
-
+	loadLanguage('CustomAction');
 	$context['page_title'] = $txt['ca_list_title'];
 	loadTemplate('CustomAction');	
 	$context['sub_template'] = 'show_custom_action';
@@ -368,6 +368,7 @@ function CustomActionEdit($actionerrors = array())
 	if (empty($context['user']['is_logged']))
 		fatal_lang_error('custom_action_guest_not_allowed', false);
 
+	loadLanguage('CustomAction');
 	loadTemplate('CustomAction');	
 	$context['sub_template'] = 'edit_custom_action';
 	
