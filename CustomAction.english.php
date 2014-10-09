@@ -1,13 +1,12 @@
 <?php
-/*
- * @package Custom Actions
- * @version 4.0
- * @license http://creativecommons.org/licenses/by/3.0
- */ 
+/**********************************************************************************
+* CustomAction.php                                                                *
+***********************************************************************************
+* Software Version:           4.0                                                 *
+**********************************************************************************/
 
 //Permissions related strings
-$txt['permissiongroup_simple_ca_per_simple'] = 'Custom Actions MOD';
-$txt['permissiongroup_simple_ca_per_classic'] = 'Custom Actions MOD';
+$txt['permissiongroup_ca_per_simple'] = 'Custom Actions MOD';
 $txt['permissionhelp_ca_createAction'] = 'Custom Actions MOD <br />Membergroups with this permission will be able to create Custom Actions';
 $txt['permissionname_ca_createAction'] = 'Can create Custom Actions';
 $txt['permissionhelp_ca_editAction'] = 'Custom Actions MOD <br />Membergroups with this permission will be able to EDIT own or any Custom Actions';

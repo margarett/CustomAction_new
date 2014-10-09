@@ -1,9 +1,9 @@
 <?php
-/*
- * @package Custom Actions
- * @version 4.0
- * @license http://creativecommons.org/licenses/by/3.0
- */ 
+/**********************************************************************************
+* CustomAction.php                                                                *
+***********************************************************************************
+* Software Version:           4.0                                                 *
+**********************************************************************************/
 
 if (!defined('SMF'))
 	die('Hacking attempt...');
@@ -375,8 +375,6 @@ function CustomActionEdit($actionerrors = array())
 	//We need this for membergroup names...
 	loadLanguage('Admin');
 
-	// Needed for inline permissions.
-	//require_once($sourcedir . '/ManagePermissions.php');
 	// Needed for BBC actions.
 	require_once($sourcedir . '/Subs-Post.php');
 	
@@ -393,18 +391,14 @@ function CustomActionEdit($actionerrors = array())
 	if (isset($_POST['save']))
 	{
 		checkSession();	
-		// echo '<pre>';
-		// print_r($_POST);
-		// echo '</pre>';
-		// exit;
 		//Get me a list of all actions! There is quite a lot to do with this query...
 		$request = $smcFunc['db_query']('', '
 			SELECT id_action, id_parent, url, permissions_mode, id_author
 			FROM {db_prefix}custom_actions'
-		);		
+		);
 		$actions = array();
 		while ($row = $smcFunc['db_fetch_assoc']($request))
-			$actions[] = $row;		
+			$actions[$row['id_action']] = $row;
 		$smcFunc['db_free_result']($request);
 
 		//Action type. Some checking that *should* not be needed but, nevertheless...
@@ -413,7 +407,7 @@ function CustomActionEdit($actionerrors = array())
 			$type = $actiontype;
 		else
 			$type = 0; //Defaults BBC
-		
+
 		//Already some useful attributions
 		$enabled = !empty($_POST['enabled']) ? 1 : 0; // Is the action enabled?
 		$menu = !empty($_POST['menubutton']) && !$parent ? 1 : 0; // A menu button?
@@ -443,12 +437,6 @@ function CustomActionEdit($actionerrors = array())
 			$header = !empty($_POST['php_header']) ? $_POST['php_header'] : '';		
 		}
 
-		//Find the "perm_group" items posted
-		$action_groups = array();
-		foreach ($_POST as $key => $value)
-			if (stristr($key, 'perm_group'))
-				$action_groups[] = substr($key,10);
-		
 		//a useful array of reserved URLs
 		$reserved_urls = array('action', 'index');
 		
@@ -476,6 +464,25 @@ function CustomActionEdit($actionerrors = array())
 		//And do we have content?
 		if (empty($body))
 				$actionerrors[] = $txt['ca_error_empty_body'];
+		
+		//So, permissions. And error checking while at it :)
+		//If I'm not allowed to choose permissions, I just stick -2 in it or take whatever is already in the database.
+		$action_groups = array();
+		if (!$can_edit_groups)
+		{
+			if (empty($action)) //new action, period
+				$action_groups[] = '-2';
+			else
+				//Just pick existing permissions in the database
+				$action_groups = explode(',', $actions[$action]['permissions_mode']);
+		}
+		else //I'm Bruce All Mighty, I *HAVE* to choose permissions!
+		{
+			foreach ($_POST as $key => $value)
+				if (stristr($key, 'perm_group'))
+					$action_groups[] = substr($key,10);
+		}
+		
 		//Can we select allowed membergroups and we choose nothing?
 		if (($can_edit_groups == 1) && empty($action_groups))
 				$actionerrors[] = $txt['ca_error_empty_groups'];
@@ -485,14 +492,11 @@ function CustomActionEdit($actionerrors = array())
 			return CustomActionEdit($actionerrors);
 		}
 		
-		//So, permissions.
-		if (empty($action_groups))
-			$permissions_mode = -2; //Defaults to everyone
-		else
-			$permissions_mode = implode(',',$action_groups);
+		$permissions_mode = implode($action_groups, ',');
 
 		// Update the database.
 		if (!empty($action)) //Editing an already existent action
+		{
 			$smcFunc['db_query']('', '
 				UPDATE {db_prefix}custom_actions
 				SET name = {string:name}, url = {string:url}, enabled = {int:enabled}, permissions_mode = {string:permissions_mode},
@@ -510,6 +514,7 @@ function CustomActionEdit($actionerrors = array())
 					'body' => $body,
 				)
 			);
+		}
 		// A new action.
 		else
 		{
@@ -571,7 +576,7 @@ function CustomActionEdit($actionerrors = array())
 			$to_delete[] = $row['id_action'];
 		$smcFunc['db_free_result']($request);
 
-		// First take the actions.
+		// Kill them actions :)
 		$smcFunc['db_query']('', '
 			DELETE FROM {db_prefix}custom_actions
 			WHERE id_action IN ({array_int:to_delete})',
@@ -580,21 +585,10 @@ function CustomActionEdit($actionerrors = array())
 			)
 		);
 
-		// Now get rid of those extra permissions.
-		foreach ($to_delete as $key => $value)
-			$to_delete[$key] = 'ca_' . $value;
-		$smcFunc['db_query']('', '
-			DELETE FROM {db_prefix}permissions
-			WHERE permission IN ({array_string:to_delete})',
-			array(
-				'to_delete' => $to_delete,
-			)
-		);
-
 		// We'll need to recache.
 		recacheCustomActions();
 
-		redirectexit('action=ca_list' . ($context['id_parent'] ? ';id_action=' . $context['id_parent'] : ''));
+		redirectexit('action=ca_list' . ($context['id_parent'] ? ';id_action=' . $context['id_parent'	] : ''));
 	}
 	// Are we editing or creating a new action?
 	else
@@ -603,7 +597,7 @@ function CustomActionEdit($actionerrors = array())
 		if (empty($action)) {
 			$context['page_title'] = $txt['ca_new_title'];
 			// Are we allowed to create new actions?
-			if (!allowedTo('create_custom_action'))
+			if (!allowedTo('ca_createAction'))
 				fatal_lang_error('ca_create_not_allowed', false); //You can't be here, dude!
 
 			//Get some data, because we *might* be returning from an error, right?
@@ -617,6 +611,14 @@ function CustomActionEdit($actionerrors = array())
 			$aux_bbc_body = !empty($_POST['bbc_body']) ? $_POST['bbc_body'] : '';
 			$aux_header = !empty($_POST['header']) ? $_POST['header'] : '';
 			$aux_body = !empty($_POST['body']) ? $_POST['body'] : '';
+			//Permissions are a bit more tricky...
+			//Find the "perm_group" items posted, if any...
+			$action_groups = array();
+			if (isset($_POST))
+				foreach ($_POST as $key => $value)
+					if (stristr($key, 'perm_group'))
+						$action_groups[] = substr($key,10);
+			$aux_permissions = !empty($action_groups) ? $action_groups : array();
 		}
 		else {
 			$context['page_title'] = $txt['ca_edit_title'];
@@ -634,9 +636,9 @@ function CustomActionEdit($actionerrors = array())
 			$actiondata = $smcFunc['db_fetch_assoc']($request);
 			$smcFunc['db_free_result']($request);
 			$allowed = false; //Control variable
-			if (allowedTo('edit_custom_action_any')) //Can we edit anyone's actions?
+			if (allowedTo('ca_editAction_any')) //Can we edit anyone's actions?
 				$allowed = true;
-			elseif (allowedTo('edit_custom_action_own') && ($context['user']['id'] == $actiondata['id_author']))
+			elseif (allowedTo('ca_editAction_own') && ($context['user']['id'] == $actiondata['id_author']))
 				$allowed = true;
 			if (!$allowed)
 				fatal_lang_error('ca_edit_not_allowed', false); //You can't be here, dude!				
@@ -651,6 +653,14 @@ function CustomActionEdit($actionerrors = array())
 			$aux_bbc_body = !empty($_POST['bbc_body']) ? $_POST['bbc_body'] : $actiondata['body'];
 			$aux_header = !empty($_POST['header']) ? $_POST['header'] : $actiondata['header'];
 			$aux_body = !empty($_POST['body']) ? $_POST['body'] : $actiondata['body'];
+			//Permissions are a bit more tricky...
+			//Find the "perm_group" items posted, if any...
+			$action_groups = array();
+			if (isset($_POST))
+				foreach ($_POST as $key => $value)
+					if (stristr($key, 'perm_group'))
+						$action_groups[] = substr($key,10);
+			$aux_permissions = !empty($action_groups) ? $action_groups : explode(',', $actiondata['permissions_mode']);
 		}
 
 		// A quick check if we are creating a new action or sub-action
@@ -676,9 +686,7 @@ function CustomActionEdit($actionerrors = array())
 			//Store parent permissions
 			$parent_perm = $parentdata['permissions_mode'];
 		}
-		
 		//Now... Since we *might* be getting here either from new/edit or via error, we need to see if there are some chosen permissions already
-		
 		//So, if we are admins, we should fetch the list of membergroups available, so that he can choose the permissions for this action
 		if ($can_edit_groups == 1) {
 			$membergroups = array();
@@ -707,24 +715,18 @@ function CustomActionEdit($actionerrors = array())
 					$membergroups[] = $row;
 			}
 			$smcFunc['db_free_result']($request);
-			
-			//Even for admin, default permissions are for everyone to read the new action -- if there were no previous post permissions!
-			if (!isset($parent_perm))
-				$permissions_mode = array(-2);
-			else
-				$permissions_mode = explode($parent_perm, ','); //Parent action permissions.		
-				
+							
 			//We need a single-dimension array for the membergroups
 			$membergroups_ids = array();
 			foreach ($membergroups as $group)
-				$membergroups_ids[] = $group['id_group'];
-			
-			// echo '<pre>';
-			// print_r($membergroups);
-			// echo '</pre>';
+				$membergroups_ids[] = $group['id_group'];	
 		}
-		elseif (isset($parent_perm)) //Do we have a parent action?
-			$permissions_mode = explode($parent_perm, ','); //Parent action permissions.		
+		//Finally, deal with access permissions
+		//If parent action permissions exist, these are the permissions!
+		if (!empty($parent_perm))
+			$permissions_mode = explode(',', $parent_perm); //Parent action permissions.
+		elseif (!empty($aux_permissions)) //Existing permissions defined?
+			$permissions_mode = $aux_permissions;
 		else
 			$permissions_mode = array(-2); //Everyone is default.
 
@@ -788,17 +790,6 @@ function CustomActionEdit($actionerrors = array())
 			$context['linktree'][] = array(
 				'name' => '<em>' . $txt['ca_edit_title'] . '</em>'
 			);
-
-		
-		// else
-			// $context['linktree'][] = array(
-				// 'url' => $scripturl . '?topic=' . $topic . '.' . $_REQUEST['start'],
-				// 'name' => $form_subject,
-				// 'extra_before' => '<span><strong class="nav">' . $context['page_title'] . ' (</strong></span>',
-				// 'extra_after' => '<span><strong class="nav">)</strong></span>'
-			// );
-		
-		
 	}
 
 }
@@ -826,7 +817,7 @@ function recacheCustomActions()
 		$cache[] = array(
 			0 => $row['url'],
 			1 => $row['name'],
-			2 => $row['permissions_mode'] == 1 ? 'ca_' . $row['id_action'] : false,
+			2 => explode(',',$row['permissions_mode']),
 			3 => $row['id_author'],
 			4 => $row['menu'],
 		);

@@ -1,19 +1,14 @@
 <?php
-/*
- * @package Custom Actions
- * @version 4.0
- * @license http://creativecommons.org/licenses/by/3.0
- */ 
+/**********************************************************************************
+* CustomAction.template.php                                                                *
+***********************************************************************************
+* Software Version:           4.0                                                 *
+**********************************************************************************/
 
 // The main template for the post page.
 function template_edit_custom_action()
 {
 	global $context, $settings, $options, $txt, $scripturl, $modSettings, $counter, $editortxt;
-	
-	// echo '<pre>';
-	// print_r($context['action']);
-	// echo '</pre>';
-	// exit;
 
 	// Start the javascript... 
 	echo '
@@ -50,8 +45,6 @@ function template_edit_custom_action()
 			</div>
 			<div>
 				<div class="roundframe">';
-				// <div class="roundframe">', isset($context['current_topic']) ? '
-					// <input type="hidden" name="topic" value="' . $context['current_topic'] . '" />' : '';
 	// If an error occurred, explain what happened.
 	echo '
 					<div class="errorbox"', empty($context['action']['errors']) ? ' style="display: none"' : '', ' id="errors">
@@ -70,35 +63,6 @@ function template_edit_custom_action()
 	echo '
 					<dl id="post_header">';
 
-/*
-	// Guests have to put in their name and email...
-	if (isset($context['name']) && isset($context['email']))
-	{
-		echo '
-						<dt>
-							<span', isset($context['post_error']['long_name']) || isset($context['post_error']['no_name']) || isset($context['post_error']['bad_name']) ? ' class="error"' : '', ' id="caption_guestname">', $txt['name'], ':</span>
-						</dt>
-						<dd>
-							<input type="text" name="guestname" size="25" value="', $context['name'], '" tabindex="', $context['tabindex']++, '" class="input_text" />
-						</dd>';
-
-		if (empty($modSettings['guest_post_no_email']))
-			echo '
-						<dt>
-							<span', isset($context['post_error']['no_email']) || isset($context['post_error']['bad_email']) ? ' class="error"' : '', ' id="caption_email">', $txt['email'], ':</span>
-						</dt>
-						<dd>
-							<input type="text" name="email" size="25" value="', $context['email'], '" tabindex="', $context['tabindex']++, '" class="input_text" />
-						</dd>';
-	}
-
-						//BACKUP OF THE SYNTAX TO HAVE THE ERROR IN RED
-						<dt class="clear">
-							<span', isset($context['ca_error']['no_name']) ? ' class="error"' : '', ' id="caption_name">', $txt['ca_name'], ':</span>
-						</dt>
-
-	
-*/
 	// Action name?
 	echo '
 						<dt class="clear">
@@ -141,7 +105,7 @@ function template_edit_custom_action()
 					if ($context['action']['can_edit_groups'] == 1) {
 						foreach ($context['action']['selectable_membergroups'] as $group) {
 	echo '
-							<input type="checkbox" name="perm_group', $group['id_group'], '" id="',$group['membergroup_name'],'" ', in_array($group['id_group'], $context['action']['permissions_mode'], true) ? ' checked="checked"' : '', '  class="input_check" />&nbsp;
+							<input type="checkbox" name="perm_group', $group['id_group'], '" id="',$group['membergroup_name'],'" ', in_array($group['id_group'], $context['action']['permissions_mode']) ? ' checked="checked"' : '', '  class="input_check" />&nbsp;
 							<label for="',$group['membergroup_name'],'">', $group['membergroup_name'], '</label><br />';
 
 						}

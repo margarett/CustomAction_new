@@ -1,9 +1,9 @@
 <?php
-/*
- * @package Custom Actions
- * @version 4.0
- * @license http://creativecommons.org/licenses/by/3.0
- */ 
+/**********************************************************************************
+* Subs-CustomAction.php                                                                *
+***********************************************************************************
+* Software Version:           4.0                                                 *
+**********************************************************************************/
 
 if (!defined('SMF'))
 	die('Hacking attempt...');
@@ -40,8 +40,8 @@ function ca_menubutton(&$buttons)
 			//update the total actions array to, later in the file, highlight the "button" when on a custom action
 			$ca_action_list[] = $button[0];
 			//If we are allowed to see them, then we should see them
-			if (!empty($button[2]) ? ca_allowedTo($button[2]) : true)
-				$has_actions = true;
+			if (!empty($button[2]) && ca_allowedTo($button[2]))
+					$has_actions = true;
 			//Is any of the actions ours?
 			if (!empty($context['user']['id']) && ($context['user']['id'] == $button[3]))
 				$own_actions = true;
@@ -61,7 +61,7 @@ function ca_menubutton(&$buttons)
 		);
 	}
 	//Are we allowed to create actions? Then we can also link that
-	if (allowedTo('create_custom_action')) {
+	if (allowedTo('ca_createAction')) {
 		$ca_sub_buttons[] = array(
 			'title' => $txt['ca_make_new'],
 			'href' => $scripturl . '?action=ca_edit',
@@ -74,7 +74,7 @@ function ca_menubutton(&$buttons)
 				$ca_sub_buttons[] = array(
 					'title' => $button[1],
 					'href' => $scripturl . '?action=' . $button[0],
-					'show' => $button[2] ? allowedTo($button[2]) : true,
+					'show' => !empty($button[2]) && ca_allowedTo($button[2]),
 				);
 		}	
 	}		
@@ -137,10 +137,10 @@ function ca_allowedTo($action_perms = array())
 	if (empty($user_info))
 		return false;
 	//Something went wrong if this triggers...
-	if (empty($action_perm))
+	if (empty($action_perms))
 		return false;
-	//If the action is for everyone, go for it. Or are superman?
-	if (in_array(array(-2), $action_perms) || $user_info['is_admin'])
+	//If the action is for everyone, go for it. Or are we superman?
+	if (in_array('-2', $action_perms) || $user_info['is_admin'])
 		return true;
 
 	//Finally, are we allowed?
@@ -148,6 +148,5 @@ function ca_allowedTo($action_perms = array())
 		return true;
 	else
 		return false;
-
 }
 ?>
