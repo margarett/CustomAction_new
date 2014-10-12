@@ -14,6 +14,7 @@ $hooks = array(
 	'integrate_actions' => 'ca_action',
 	'integrate_load_permissions' => 'ca_permissions',
 	'integrate_pre_css_output' => 'ca_load_css',
+	'integrate_helpadmin' => 'ca_permissions_help',
 );
 
 foreach ($hooks as $hook => $function)

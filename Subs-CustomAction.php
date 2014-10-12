@@ -104,18 +104,26 @@ function ca_permissions(&$permissionGroups, &$permissionList)
 {
 	//Load the language
 	loadLanguage('CustomAction');
-	//Our permissions
-	$permissions = array('createAction', 'editAction_any', 'editAction_own', 'removeAction_any', 'removeAction_own');
 	
 	$permissionGroups['membergroup']['simple'] = array('ca_per_simple');
-	$permissionGroups['membergroup']['classic'] = array('ca_per_classic');
+	
+	$permissionList['membergroup']['ca_createAction'] = array(
+															false,
+															'ca_per_simple'
+														);
+	$permissionList['membergroup']['ca_editAction'] = array(
+															true,
+															'ca_per_simple'
+														);
+	$permissionList['membergroup']['ca_removeAction'] = array(
+															true,
+															'ca_per_simple'
+														);
+}
 
-	foreach ($permissions as $p)
-		$permissionList['membergroup']['ca_'. $p] = array(
-														false,
-														'ca_per_simple',
-														'ca_per_classic'
-													);
+function ca_permissions_help()
+{
+	loadLanguage('CustomAction');
 }
 
 function ca_load_css()

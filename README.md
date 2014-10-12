@@ -1,7 +1,7 @@
 [hr]
 [center][color=red][size=16pt][b]Custom Actions[/b][/size][/color][/center]
 
-This is a rewrite of the original [url=http://custom.simplemachines.org/mods/index.php?mod=331[Custom Action[/url] MOD by [url=http://www.simplemachines.org/community/index.php?action=profile;u=12859]winrules[/url]/[url=http://www.simplemachines.org/community/index.php?action=profile;u=211029]Norv[/url], designed to run in [b]SMF 2.1[/b]
+This is a rewrite of the original [url=http://custom.simplemachines.org/mods/index.php?mod=331]Custom Action[/url] MOD by [url=http://www.simplemachines.org/community/index.php?action=profile;u=12859]winrules[/url]/[url=http://www.simplemachines.org/community/index.php?action=profile;u=211029]Norv[/url], designed to run in [b]SMF 2.1[/b]
 
 With the Custom Action Mod you can create custom pages that are wrapped in your forum's theme. 
 [b]Features[/b]

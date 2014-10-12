@@ -10,7 +10,7 @@ if (!defined('SMF'))
 
 function ViewCustomAction()
 {
-	global $context, $smcFunc, $db_prefix, $txt;
+	global $context, $smcFunc, $db_prefix, $txt, $sourcedir;
 	
 	// So which custom action is this?
 	$request = $smcFunc['db_query']('', '
@@ -60,27 +60,21 @@ function ViewCustomAction()
 			$context['action']['body'] = $sub['body'];
 		}
 	}
+	
+	//Can we access this permission?
+	$allowedgroups = explode(',',$context['action']['permissions_mode']);
+	if (!function_exists('ca_allowedTo'))
+		require_once($sourcedir . '/Subs-CustomAction.php');
 
-	// Are we even allowed to be here? Let's go with easy steps
+	//Let's go with easy steps
 	$allowed = false;
-	if ($context['action']['permissions_mode'] != 1) //If not 1 then it's 0, so we are all allowed :)
+	if (ca_allowedTo($allowedgroups)) //regular allow to view
 		$allowed = true;
-	else
-	{
-		//check. are we allowed to access this action?
-		if (allowedTo('ca_' . $context['action']['id_action']))
-			$allowed = true;
-		else {
-			//Another chance yet... Can we edit or remove other people's actions?
-			if (allowedTo('edit_custom_page_any') || allowedTo('remove_custom_page_any'))
-				$allowed = true;
-			else {
-				//Last chance! Are we the author of this action?!
-				if ($context['user']['id'] == $context['action']['id_author'])
-					$allowed = true;
-			}
-		}
-	}
+	elseif (allowedTo('ca_editAction_any') || allowedTo('ca_removeAction_any')) //Another chance yet... Can we edit or remove other people's actions?
+		$allowed = true;
+	elseif ($context['user']['id'] == $context['action']['id_author']) //Last chance! Are we the author of this action?!
+		$allowed = true;
+
 	if (!$allowed)
 		fatal_lang_error('custom_action_view_not_allowed', false);
 		
@@ -320,7 +314,7 @@ function list_getCustomActions($start, $items_per_page, $sort, $parent)
 	{
 		//We need to process what we read. Carefully now. New conditions can be added as desired.
 		//Bruce all mighty admin is included here
-		if (allowedTo('edit_custom_page_any') || allowedTo('remove_custom_page_any'))
+		if (allowedTo('ca_editAction_any') || allowedTo('ca_removeAction_any'))
 			$list[] = $row;
 		//am I the author? If so, of course I can read
 		elseif (!empty($context['user']['id']) && ($context['user']['id'] == $row['id_author']))

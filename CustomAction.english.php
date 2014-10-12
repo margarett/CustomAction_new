@@ -7,14 +7,16 @@
 
 //Permissions related strings
 $txt['permissiongroup_ca_per_simple'] = 'Custom Actions MOD';
-$txt['permissionhelp_ca_createAction'] = 'Custom Actions MOD <br />Membergroups with this permission will be able to create Custom Actions';
+$txt['permissionhelp_ca_createAction'] = '<strong>Custom Actions MOD</strong><br />Membergroups with this permission will be able to create Custom Actions';
 $txt['permissionname_ca_createAction'] = 'Can create Custom Actions';
-$txt['permissionhelp_ca_editAction'] = 'Custom Actions MOD <br />Membergroups with this permission will be able to EDIT own or any Custom Actions';
+
 $txt['permissionname_ca_editAction'] = 'Can edit Custom Actions';
+$txt['permissionhelp_ca_editAction'] = '<strong>Custom Actions MOD</strong><br />Membergroups with this permission will be able to edit Custom Actions';
 $txt['permissionname_ca_editAction_own'] = 'Own Actions';
 $txt['permissionname_ca_editAction_any'] = 'Any Actions';
-$txt['permissionhelp_ca_removeAction'] = 'Custom Actions MOD <br />Membergroups with this permission will be able to REMOVE own or any Custom Actions';
+
 $txt['permissionname_ca_removeAction'] = 'Can remove Custom Actions';
+$txt['permissionhelp_ca_removeAction'] = '<strong>Custom Actions MOD</strong><br />Membergroups with this permission will be able to Remove Custom Actions';
 $txt['permissionname_ca_removeAction_own'] = 'Own Actions';
 $txt['permissionname_ca_removeAction_any'] = 'Any Actions';
 
